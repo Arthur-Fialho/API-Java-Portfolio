@@ -1,0 +1,21 @@
+# Configuração da Conexão com o Banco de Dados PostgreSQL
+
+#spring.datasource.url=jdbc:postgresql://localhost:5432/portfolio
+#spring.datasource.username=postgres
+#spring.datasource.password=SUA_SENHA_AQUI
+
+# ... outras configurações ...
+
+# Configuração do Hibernate (parte do JPA)
+# ddl-auto=update -> O Hibernate tentará atualizar o schema do banco com base nas suas entidades.
+# Ótimo para desenvolvimento, mas em produção usaremos Flyway (próximos dias).
+
+#spring.jpa.hibernate.ddl-auto=update
+
+# Opcional: Mostra no console o SQL que o Hibernate está executando. Muito útil para debug.
+#spring.jpa.show-sql=true
+
+#spring.jpa.open-in-view=false
+
+#admin.default.username=SeuUsuarioAdmin
+#admin.default.password=SuaSenhaAdmin
