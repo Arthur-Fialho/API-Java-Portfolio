@@ -1,5 +1,6 @@
 package com.arthurfialho.api.service;
 
+import com.arthurfialho.api.mapper.EducationMapper;
 import com.arthurfialho.api.dto.EducationRequestDTO;
 import com.arthurfialho.api.dto.EducationResponseDTO;
 import com.arthurfialho.api.model.Education;
@@ -16,33 +17,30 @@ public class EducationService {
     @Autowired
     private EducationRepository educationRepository;
 
+    @Autowired
+    private EducationMapper educationMapper;
+
     public List<EducationResponseDTO> listAll() {
-        return educationRepository.findAll().stream().map(this::toDto).toList();
+        return educationRepository.findAll().stream()
+                .map(educationMapper::toResponseDTO)
+                .toList();
     }
 
     public EducationResponseDTO findById(Long id) {
+
         Education education = findEducationById(id);
-        return toDto(education);
+        return educationMapper.toResponseDTO(education);
     }
 
     public EducationResponseDTO create(EducationRequestDTO requestDTO) {
-        Education education = new Education();
-        education.setInstitution(requestDTO.institution());
-        education.setCourse(requestDTO.course());
-        education.setStartDate(requestDTO.startDate());
-        education.setEndDate(requestDTO.endDate());
-        education.setDescription(requestDTO.description());
-        return toDto(educationRepository.save(education));
+        Education education = educationMapper.toEntity(requestDTO);
+        return educationMapper.toResponseDTO(educationRepository.save(education));
     }
 
     public EducationResponseDTO update(Long id, EducationRequestDTO requestDTO) {
         Education education = findEducationById(id);
-        education.setInstitution(requestDTO.institution());
-        education.setCourse(requestDTO.course());
-        education.setStartDate(requestDTO.startDate());
-        education.setEndDate(requestDTO.endDate());
-        education.setDescription(requestDTO.description());
-        return toDto(educationRepository.save(education));
+        educationMapper.updateEntityFromDto(requestDTO, education);
+        return educationMapper.toResponseDTO(educationRepository.save(education));
     }
 
     public void delete(Long id) {
@@ -55,16 +53,5 @@ public class EducationService {
     private Education findEducationById(Long id) {
         return educationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Educação não encontrada com o id: " + id));
-    }
-
-    private EducationResponseDTO toDto(Education education) {
-        return new EducationResponseDTO(
-                education.getId(),
-                education.getInstitution(),
-                education.getCourse(),
-                education.getStartDate(),
-                education.getEndDate(),
-                education.getDescription()
-        );
     }
 }
