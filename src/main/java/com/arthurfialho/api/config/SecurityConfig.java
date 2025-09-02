@@ -33,8 +33,8 @@ public class SecurityConfig {
                 // Configura as regras de autorização para os endpoints
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        // Permite acesso público (sem autenticação) para requisições GET em /projects e seus sub-paths
-                        .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
+                        // Permite acesso público (sem autenticação) para requisições GET em /projects, /experiences e /educations e seus sub-paths
+                        .requestMatchers(HttpMethod.GET, "/projects/**", "/experiences/**", "/educations/**").permitAll()
                         // Qualquer outra requisição (anyRequest) precisa estar autenticada (authenticated)
                         .anyRequest().authenticated()
                 )
