@@ -3,6 +3,7 @@ package com.arthurfialho.api.service;
 import com.arthurfialho.api.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.JwtParserBuilder;    
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,22 @@ public class TokenService {
                 .setExpiration(Date.from(expiration)) // Data de expiração
                 .signWith(key) // Assina o token com a chave secreta
                 .compact(); // Constrói o token e o serializa para uma string
+    }
+
+    public String validateToken(String token) {
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+
+            return Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+
+        } catch (Exception e) {
+            // Se o token for inválido, retorna null.
+            return null;
+        }
     }
 }
