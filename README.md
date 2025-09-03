@@ -65,6 +65,24 @@ Você pode executar a aplicação usando o Maven:
 
 A API estará disponível em `http://localhost:8080`.
 
+### Executando com Docker
+
+Uma maneira alternativa e mais prática de executar a aplicação é utilizando Docker. O projeto já vem com um arquivo `docker-compose.yml` que sobe tanto a API quanto o banco de dados PostgreSQL.
+
+1.  **Verifique se o Docker e o Docker Compose estão instalados.**
+
+2.  **Configure as variáveis de ambiente:**
+    -   Copie o arquivo `.env.example` para `.env`.
+    -   Altere as variáveis no arquivo `.env` conforme necessário, especialmente a senha do banco de dados.
+
+3.  **Execute o Docker Compose:**
+    Na raiz do projeto (`api/`), execute o seguinte comando para construir e iniciar os contêineres em modo detached:
+    ```bash
+    docker-compose up -d --build
+    ```
+
+A API estará disponível em `http://localhost:8080` e o banco de dados na porta `5432`.
+
 ## Endpoints da API
 
 Todos os endpoints que manipulam dados (POST, PUT, DELETE) são protegidos e exigem um token JWT no cabeçalho `Authorization`.
