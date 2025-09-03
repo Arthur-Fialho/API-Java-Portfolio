@@ -22,32 +22,31 @@ public class EducationService {
 
     public List<EducationResponseDTO> listAll() {
         return educationRepository.findAll().stream()
-                .map(educationMapper::toResponseDTO)
+                .map(educationMapper::toDto) // <-- MUDANÇA AQUI
                 .toList();
     }
 
     public EducationResponseDTO findById(Long id) {
-
         Education education = findEducationById(id);
-        return educationMapper.toResponseDTO(education);
+        return educationMapper.toDto(education); // <-- MUDANÇA AQUI
     }
 
     public EducationResponseDTO create(EducationRequestDTO requestDTO) {
         Education education = educationMapper.toEntity(requestDTO);
-        return educationMapper.toResponseDTO(educationRepository.save(education));
+        return educationMapper.toDto(educationRepository.save(education)); // <-- MUDANÇA AQUI
     }
 
     public EducationResponseDTO update(Long id, EducationRequestDTO requestDTO) {
         Education education = findEducationById(id);
         educationMapper.updateEntityFromDto(requestDTO, education);
-        return educationMapper.toResponseDTO(educationRepository.save(education));
+        return educationMapper.toDto(educationRepository.save(education)); // <-- MUDANÇA AQUI
     }
 
     public void delete(Long id) {
         if (!educationRepository.existsById(id)) {
             throw new ResourceNotFoundException("Educação não encontrada com o id: " + id);
         }
-        educationRepository.deleteById(id);
+
     }
 
     private Education findEducationById(Long id) {

@@ -22,24 +22,24 @@ public class ExperienceService {
 
     public List<ExperienceResponseDTO> listAll() {
         return experienceRepository.findAll().stream()
-                .map(experienceMapper::toResponseDTO)
+                .map(experienceMapper::toDto)
                 .toList();
     }
 
     public ExperienceResponseDTO findById(Long id) {
         Experience experience = findExperienceById(id);
-        return experienceMapper.toResponseDTO(experience);
+        return experienceMapper.toDto(experience);
     }
 
     public ExperienceResponseDTO create(ExperienceRequestDTO requestDTO) {
         Experience experience = experienceMapper.toEntity(requestDTO);
-        return experienceMapper.toResponseDTO(experienceRepository.save(experience));
+        return experienceMapper.toDto(experienceRepository.save(experience));
     }
 
     public ExperienceResponseDTO update(Long id, ExperienceRequestDTO requestDTO) {
         Experience experience = findExperienceById(id);
         experienceMapper.updateEntityFromDto(requestDTO, experience);
-        return experienceMapper.toResponseDTO(experienceRepository.save(experience));
+        return experienceMapper.toDto(experienceRepository.save(experience));
     }
 
     public void delete(Long id) {

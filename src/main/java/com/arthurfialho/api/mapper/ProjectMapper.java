@@ -3,21 +3,49 @@ package com.arthurfialho.api.mapper;
 import com.arthurfialho.api.dto.ProjectRequestDTO;
 import com.arthurfialho.api.dto.ProjectResponseDTO;
 import com.arthurfialho.api.model.Project;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring") // Faz o MapStruct gerar um Bean do Spring
-public interface ProjectMapper {
-
-    // Instância do mapper que podemos usar (opcional com componentModel="spring", mas útil)
-    ProjectMapper INSTANCE = Mappers.getMapper(ProjectMapper.class);
+@Component 
+public class ProjectMapper { 
 
     // Mapeia de Entidade para DTO de Resposta
-    ProjectResponseDTO toResponseDTO(Project project);
+    public ProjectResponseDTO toResponseDTO(Project project) {
+        if (project == null) {
+            return null;
+        }
+        return new ProjectResponseDTO(
+                project.getId(),
+                project.getTitle(),
+                project.getDescription(),
+                project.getTechnologies(),
+                project.getRepositoryUrl(),
+                project.getDemoUrl()
+        );
+    }
 
     // Mapeia de DTO de Requisição para Entidade
-    Project toEntity(ProjectRequestDTO projectRequestDTO);
+    public Project toEntity(ProjectRequestDTO requestDTO) {
+        if (requestDTO == null) {
+            return null;
+        }
+        Project project = new Project();
+        project.setTitle(requestDTO.title());
+        project.setDescription(requestDTO.description());
+        project.setTechnologies(requestDTO.technologies());
+        project.setRepositoryUrl(requestDTO.repositoryUrl());
+        project.setDemoUrl(requestDTO.demoUrl());
+        return project;
+    }
 
-    void updateEntityFromDto(ProjectRequestDTO dto, @MappingTarget Project entity);
+    // Mapeia um DTO para uma Entidade existente (para atualizações)
+    public void updateEntityFromDto(ProjectRequestDTO dto, Project entity) {
+        if (dto == null || entity == null) {
+            return;
+        }
+        entity.setTitle(dto.title());
+        entity.setDescription(dto.description());
+        entity.setTechnologies(dto.technologies());
+        entity.setRepositoryUrl(dto.repositoryUrl());
+        entity.setDemoUrl(dto.demoUrl());
+    }
 }
