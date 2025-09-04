@@ -31,7 +31,7 @@ services:
         sync: false
 
   - name: portfolio-frontend
-    type: static
+    type: static_site
     plan: free
     repo: https://github.com/Arthur-Fialho/API-Java-Portfolio-Frontend
     branch: main
