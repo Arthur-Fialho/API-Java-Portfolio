@@ -1,0 +1,48 @@
+services:
+  - name: portfolio-postgres
+    type: pserv
+    plan: free
+    databaseName: portfolio
+    ipAllowList: []
+
+  - name: portfolio-api
+    type: web
+    plan: free
+    runtime: docker
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: portfolio-postgres
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: portfolio-postgres
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: portfolio-postgres
+          property: password
+      - key: ADMIN_DEFAULT_USERNAME
+        value: admin
+      - key: ADMIN_DEFAULT_PASSWORD
+        sync: false
+      - key: API_SECURITY_TOKEN_SECRET
+        sync: false
+
+  - name: portfolio-frontend
+    type: static
+    plan: free
+    repo: https://github.com/Arthur-Fialho/API-Java-Portfolio-Frontend
+    branch: main
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    rewriteRules:
+      - source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          name: portfolio-api
+          type: web
+          property: url
