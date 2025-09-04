@@ -34,7 +34,7 @@ Esta é uma API RESTful construída com Java e Spring Boot para gerenciar o cont
 
 1.  **Clone o repositório:**
     ```bash
-    git clone <url-do-repositorio>
+    git clone https://github.com/Arthur-Fialho/API-Java-Portfolio.git
     cd api
     ```
 
