@@ -3,7 +3,7 @@ services:
     type: pserv
     plan: free
     databaseName: portfolio
-    ipAllowList: []
+    user: postgres
 
   - name: portfolio-api
     type: web
@@ -23,26 +23,7 @@ services:
         fromDatabase:
           name: portfolio-postgres
           property: password
-      - key: ADMIN_DEFAULT_USERNAME
-        value: admin
       - key: ADMIN_DEFAULT_PASSWORD
-        sync: false
+        sync: false 
       - key: API_SECURITY_TOKEN_SECRET
         sync: false
-
-  - name: portfolio-frontend
-    type: static_site
-    plan: free
-    repo: https://github.com/Arthur-Fialho/API-Java-Portfolio-Frontend
-    branch: main
-    buildCommand: npm install && npm run build
-    publishDir: dist
-    rewriteRules:
-      - source: /*
-        destination: /index.html
-    envVars:
-      - key: VITE_API_BASE_URL
-        fromService:
-          name: portfolio-api
-          type: web
-          property: url
